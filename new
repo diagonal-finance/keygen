@@ -1,7 +1,10 @@
 #!/usr/bin/env sh
 set -e
 
-key=`openssl ecparam -name secp256k1 -genkey -noout | openssl ec -text -noout`
+# This script uses openssl to generate an ECDSA private/public key pair
+
+# Generate keys
+key=`openssl ecparam -name secp256k1 -genkey -noout | openssl ec -text -noout 2>/dev/null`
 
 # Extract the public key and remove the EC prefix 0x04
 pub=`echo "${key}" | grep pub -A 5 | tail -n +2 | tr -d '\n[:space:]:' | sed 's/^04//'`
