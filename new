@@ -1,0 +1,20 @@
+#!/usr/bin/env sh
+set -e
+
+key=`openssl ecparam -name secp256k1 -genkey -noout | openssl ec -text -noout`
+
+# Extract the public key and remove the EC prefix 0x04
+pub=`echo "${key}" | grep pub -A 5 | tail -n +2 | tr -d '\n[:space:]:' | sed 's/^04//'`
+
+# Extract the private key and remove the leading zero byte
+priv=`echo "${key}" | grep priv -A 3 | tail -n +2 | tr -d '\n[:space:]:' | sed 's/^00//'`
+
+echo ""
+echo "Private Key:"
+echo "0x"$priv
+
+echo ""
+echo "Public Key:"
+echo $pub
+echo ""
+echo "You can verify the script you just ran at keys.diagonal.new"
